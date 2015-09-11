@@ -1,4 +1,6 @@
-pause on
+clear all
+set more off
+pause off
 /**********************************
 CREATED BY: Danton Noriega 09/11/2015
 
@@ -33,29 +35,33 @@ tempfile hold
 tempfile temp
 /* input data and convert names */
 foreach f of local allfiles {
-    /* strp csv from file name */
+     * strp csv from file name
     if(regexm("`f'", "(.*)\.csv")) local strp_csv = regexs(1)
     * di "`strp_csv'"
     import delimited `f', clear
-    /* get list of vars */
+     * get list of vars
     local vars ""
     foreach v of varlist _all {
         local vars = "`vars'" + "`v' "
-        // di "`vars'"
+        * di "`vars'"
     }
-    * remove keys and rename
+     * remove keys and rename
     local vars_nokey : list vars - keys
     foreach v of local vars_nokey {
         rename `v' `v'_`strp_csv'
     }
+     * if first file, save copy
     if(`first' == 1) {
         local first 0
         save `hold', replace
     }
+     * if NOT first file, merge then update
     else {
         save `temp', replace
         use `hold', clear
-        merge m:1 `keys' using `temp'
+        merge m:1 `keys' using `temp', nogen
         save `hold', replace
     }
 }
+cd `output_dir'
+saveold "merged_renamed.dta", replace

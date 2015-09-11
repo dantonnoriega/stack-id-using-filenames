@@ -37,13 +37,11 @@ tempfile temp
 foreach f of local allfiles {
      * strp csv from file name
     if(regexm("`f'", "(.*)\.csv")) local strp_csv = regexs(1)
-    * di "`strp_csv'"
     import delimited `f', clear
      * get list of vars
     local vars ""
     foreach v of varlist _all {
         local vars = "`vars'" + "`v' "
-        * di "`vars'"
     }
      * remove keys and rename
     local vars_nokey : list vars - keys

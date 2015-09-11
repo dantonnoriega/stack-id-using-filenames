@@ -6,15 +6,18 @@ CREATED BY: Danton Noriega 09/11/2015
 
 DESC:
 - Load files from directory `input_dir'
+- merge all files on variable(s) `keys' e.g. if merge keys are i, t
+    then the one would write: local keys "i t"
 - append variables of each file with suffix of "filename" e.g.
-file = "ab2.csv" with vars "x", "y" become "x_ab2" and "y_ab2"
-- merge all files on variable `key'
-- export merged file to `output_dir'
+    file = "ab2.csv" with vars "x", "y" become "x_ab2" and "y_ab2".
+    NOTE: this EXCLUDES the keys, which should be shared across all files.
+- export merged file to dir `output_dir' with name `merged_rename'.dta
 *************************************/
 
 local main_dir "~/GitHub/merge_rename_using_filenames/"
 local input_dir "~/GitHub/merge_rename_using_filenames/sample_data/"
 local output_dir "`main_dir'/merged_data/"
+local output_file "merged_renamed"
 local keys "i t"
 
 /* get file names from directory */
@@ -62,4 +65,4 @@ foreach f of local allfiles {
     }
 }
 cd `output_dir'
-saveold "merged_renamed.dta", replace
+saveold "`output_file'.dta", replace

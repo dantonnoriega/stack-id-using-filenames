@@ -19,28 +19,33 @@ local input_dir "`main_dir'"
 local output_dir "`main_dir'/dta/"
 local output_file "stacked_files"
 
-/* get file names from directory */
+* get file names from directory
 cd `input_dir'
 local allfiles : dir . files "*csv"
 
-/* strip csv */
+* strip csv
 local strp_csv ""
+local count = 0
 foreach f of local allfiles {
     if(regexm("`f'", "(.*)\.csv")) {
         local strp_csv = "`strp_csv'" + regexs(1) + " "
     }
 }
 di "`strp_csv'"
+di "`count'"
 
 local first 1
 tempfile hold
 tempfile temp
-/* input data and convert names */
+local count = 0
+* input data and convert names
 foreach f of local allfiles {
      * strp csv from file name
     if(regexm("`f'", "(.*)\.csv")) local strp_csv = regexs(1)
+    qui import delimited `f', delimiter(comma) varnames(1) clear
     di "`strp_csv'"
-    import delimited `f', delimiter(comma) varnames(1) clear
+    local count = `count' + 1
+    di "`count'"
      * if first file, save copy
     if(`first' == 1) {
         local first 0

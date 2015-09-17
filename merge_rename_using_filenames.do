@@ -14,14 +14,23 @@ DESC:
 - export stack file to dir `output_dir' with name `stack_rename'.dta
 *************************************/
 
-local main_dir "~/GitHub/stack_id_using_filenames"
-local input_dir "~/GitHub/stack_id_using_filenames/sample_data/"
-local output_dir "`main_dir'/stacked_data/"
-local output_file "stacked_renamed"
+local main_dir "/Users/dnoriega/Dropbox/meter"
+local input_dir "`main_dir'"
+local output_dir "`main_dir'/dta/"
+local output_file "stacked_files"
 
 /* get file names from directory */
 cd `input_dir'
 local allfiles : dir . files "*csv"
+
+/* strip csv */
+local strp_csv ""
+foreach f of local allfiles {
+    if(regexm("`f'", "(.*)\.csv")) {
+        local strp_csv = "`strp_csv'" + regexs(1) + " "
+    }
+}
+di "`strp_csv'"
 
 local first 1
 tempfile hold
@@ -30,7 +39,8 @@ tempfile temp
 foreach f of local allfiles {
      * strp csv from file name
     if(regexm("`f'", "(.*)\.csv")) local strp_csv = regexs(1)
-    import delimited `f', clear
+    di "`strp_csv'"
+    import delimited `f', delimiter(comma) varnames(1) clear
      * if first file, save copy
     if(`first' == 1) {
         local first 0

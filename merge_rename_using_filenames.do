@@ -39,6 +39,7 @@ foreach f of local allfiles {
     }
      * if NOT first file, merge then update
     else {
+        gen id = "`strp_csv'"
         save `temp', replace
         use `hold', clear
         append using `temp'

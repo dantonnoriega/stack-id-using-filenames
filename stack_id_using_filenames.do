@@ -6,12 +6,9 @@ CREATED BY: Danton Noriega 09/11/2015
 
 DESC:
 - Load files from directory `input_dir'
-- merge all files on variable(s) `keys' e.g. if merge keys are i, t
-    then the one would write: local keys "i t"
-- append variables of each file with suffix of "filename" e.g.
-    file = "ab2.csv" with vars "x", "y" become "x_ab2" and "y_ab2".
-    NOTE: this EXCLUDES the keys, which should be shared across all files.
-- export stack file to dir `output_dir' with name `stack_rename'.dta
+- create new `id` variable which matches the filename e.g.
+    file = "ab2.csv" would be imported then generated new ver `gen id = "ab2"`
+- export stacked file to dir `output_dir' with name `stacked_files'.dta
 *************************************/
 
 local main_dir "/Users/dnoriega/Dropbox/meter"
